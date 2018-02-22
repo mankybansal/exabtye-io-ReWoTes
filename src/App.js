@@ -1,9 +1,26 @@
 import React, {Component} from 'react';
 import * as THREE from 'three';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import {faBars, faCode, faEye, faTimes, faRedo, faPlus, faDownload} from '@fortawesome/fontawesome-free-solid'
+import {
+    faCamera,
+    faSearchPlus,
+    faColumns,
+    faSearchMinus,
+    faExpand,
+    faPause,
+    faAngleDown,
+    faBars,
+    faStop,
+    faCode,
+    faEye,
+    faTimes,
+    faRedo,
+    faPlus,
+    faDownload
+} from '@fortawesome/fontawesome-free-solid'
 import OrbitControls from 'three-orbitcontrols';
 import logo from './exabtye-logo.png';
+import manky from './manky.jpg';
 import './App.css';
 
 
@@ -21,13 +38,24 @@ class App extends Component {
                     <div class="nav"><FontAwesomeIcon icon={faBars}/></div>
                     <img src={logo} className="App-logo" alt="logo"/>
                     <div className="App-location">Material Developer</div>
+
+                    <div className="layout-toggle">
+                        Code Split &nbsp;&nbsp;<FontAwesomeIcon icon={faColumns}/> &nbsp;&nbsp;
+                        <FontAwesomeIcon icon={faAngleDown}/>
+                    </div>
+
                     <div className="App-avatar">
-                        <div className="App-avatar-text"> Mayank Bansal</div>
+                        <div className="App-avatar-text"> Mayank Bansal &nbsp; <FontAwesomeIcon icon={faAngleDown}/></div>
+
                         <div className="App-avatar-img">
-                            <img src=""/>
+                            <img className="avatar-img" src={manky}/>
                         </div>
                     </div>
+
+
                 </div>
+
+                <div className="App-spacer"></div>
 
                 <div className="App-menu">
                     <div className="App-menu-item">
@@ -51,6 +79,7 @@ class App extends Component {
                     <div className="App-menu-item">
                         <u>H</u>elp
                     </div>
+
                 </div>
 
                 <div className="App-editor-container">
@@ -82,18 +111,59 @@ class App extends Component {
                         </div>
                     </div>
                     <div className="App-editor-view">
-                        <div className="container-title">
+
+                        <div className="container-title-2">
                             <FontAwesomeIcon icon={faEye}/>&nbsp;&nbsp;&nbsp;Visual Editor
                         </div>
                         <Scene/>
+
                         <div className="compound-details">C<sub>6</sub>H<sub>6</sub></div>
+
                     </div>
+
+                    <div className="viewer-controls">
+                        <div className="viewer-ctrl">
+                            <FontAwesomeIcon icon={faExpand}/>
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <div className="viewer-ctrl">
+                            <FontAwesomeIcon icon={faCamera}/>
+                        </div>
+                        <div className="viewer-ctrl">
+                            <FontAwesomeIcon icon={faPause}/>
+                        </div>
+                        <div className="viewer-ctrl">
+                            <FontAwesomeIcon icon={faSearchPlus}/>
+                        </div>
+                        <div className="viewer-ctrl">
+                            <FontAwesomeIcon icon={faSearchMinus}/>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div className="App-terminal">
                     <div className="App-terminal-controls">
                         <div className="App-terminal-ctrl">
                             <FontAwesomeIcon icon={faPlus}/>
+                        </div>
+                        <div className="App-terminal-ctrl">
+                            <FontAwesomeIcon icon={faStop}/>
                         </div>
                         <div className="App-terminal-ctrl">
                             <FontAwesomeIcon icon={faTimes}/>
@@ -106,11 +176,18 @@ class App extends Component {
                         </div>
                     </div>
                     <div className="App-terminal-container">
-                        <div className = "App-terminal-input">
+                        <div className="App-terminal-input">
                             <div className="prompt">exabyte-io/demo $</div>
-                            <div className="Blinker">|</div></div>
+                            <div className="Blinker">|</div>
+                        </div>
+                    </div>
+
+                    <div className="compute-usage">
+                        CPU Usage
                     </div>
                 </div>
+
+
 
             </div>
         );
@@ -253,10 +330,10 @@ class Scene extends Component {
         //These cubes can now be rotated / scaled etc as a group
 
 
-        const geometry2 = new THREE.BoxBufferGeometry( 5, 5, 5);
-        const edges = new THREE.EdgesGeometry( geometry2 );
-        const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0xffffff } ) );
-        group.add( line );
+        const geometry2 = new THREE.BoxBufferGeometry(5, 5, 5);
+        const edges = new THREE.EdgesGeometry(geometry2);
+        const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color: 0xffffff}));
+        group.add(line);
 
         scene.add(group);
 

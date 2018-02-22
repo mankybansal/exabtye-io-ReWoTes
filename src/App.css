@@ -13,10 +13,21 @@
 .App-header {
   background-color: #222;
   height: 60px;
-  padding: 0px 50px 0px 20px;
+  padding: 0 50px 0 20px;
   border-bottom: 1px solid #555;
   box-sizing: border-box;
   text-align: left;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  left: 0;
+  z-index: 9999;
+  box-shadow: 0 0 20px rgba(0,0,0,0.7);
+}
+
+.App-spacer {
+  width: 100%;
+  height: 60px;
 }
 
 .App-location {
@@ -55,17 +66,24 @@
   padding: 18px 18px 22px 18px;
   font-family: Roboto-Light, sans-serif;
   float: left;
+  color: #AAA;
   display: inline-block;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .App-avatar-img {
-  height: 35px;
-  width: 35px;
-  border-radius: 50%;
-  margin-top: 11px;
+  height: 40px;
+  width: 40px;
+  border-radius: 10px;
+  margin-top: 10px;
   background: #EEE;
   float: right;
+  overflow: hidden;
+}
+
+.avatar-img {
+  height: 40px;
+  width: 40px;
 }
 
 .App-menu {
@@ -81,6 +99,8 @@
   width: 100%;
   height: 500px;
   background: #EEE;
+
+  overflow: hidden;
 }
 
 .App-terminal {
@@ -88,6 +108,19 @@
   height: calc(100vh - 605px);
   background: #000;
   border-top: 5px solid #444;
+  overflow: hidden;
+}
+
+.compute-usage {
+  float: right;
+  background: #111;
+  width: calc(30% - 5px);
+  height: 100%;
+  border-left: 5px solid #444;
+  padding: 20px;
+  box-sizing: border-box;
+  color: #666;
+  font-family: Roboto-Regular, sans-serif;
 }
 
 .App-terminal-controls {
@@ -95,8 +128,10 @@
   height: 100%;
   width: 40px;
   box-sizing: border-box;
-  padding: 30px 0 30px 0;
+  padding: 10px 0 10px 0;
   background: #111;
+  box-shadow: 0 0 50px rgba(255,255,255,.3);
+
 }
 
 .App-terminal-ctrl {
@@ -109,15 +144,17 @@
 }
 
 .App-terminal-ctrl:hover {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
 }
 
 .App-editor-code {
   background-color: #222;
   float: left;
   height: 100%;
-  width: calc(60% - 5px);
+  width: calc(60% - 45px);
   border-right: 5px solid #444;
+  overflow: hidden;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
 }
 
 .App-editor-code-text {
@@ -134,6 +171,8 @@
   background: rgba(0,0,0,0.2);
   padding-top: 15px;
   box-sizing: border-box;
+
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
 }
 
 .App-editor-code-lines-num {
@@ -145,16 +184,17 @@
 
 .App-editor-view {
   background-color: #111;
-  float: right;
+  float: left;
   width: 40%;
   height: 100%;
   overflow: hidden;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
 }
 
 .App-menu-item {
   height: 40px;
   font-size: 16px;
-  color: #555;
+  color: #444;
   padding: 10px 30px 14px 30px;
   float: left;
   font-family: Roboto-Light, sans-serif;
@@ -180,22 +220,30 @@
 .renderer {
   width: 100%;
   height: calc(100% - 100px);
+  background: blue;
 }
 
-.container-title, .c {
+.container-title, .container-title-2 {
   width: 100%;
   box-sizing: border-box;
   font-family: Roboto-Light, sans-serif;
-  padding: 10px;
+  padding: 15px;
   background: #333;
+  font-size: 14px;
   color: #EEE;
+  box-shadow: 0 0 30px rgba(0,0,0,.5);
 }
+.container-title-2{
+  background: rgba(255,255,255,0.05);
+  color: #AAA;
+}
+
 
 .compound-details {
   width: 100%;
   height: 60px;
-  background: #222;
-  color: white;
+  background: rgba(255,255,255,0.05);
+  color: #AAA;
   padding: 18px;
   box-sizing: border-box;
   font-family: Roboto-Regular, sans-serif;
@@ -203,8 +251,11 @@
 }
 
 .App-terminal-container {
-  width: calc(100% - 40px);
-  padding: 0 30px 20px 70px;
+  width: calc(70% - 40px);
+  padding: 0 30px 20px 50px;
+  float: left;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .App-terminal-input {
@@ -233,4 +284,46 @@
   0% {opacity: 0;}
   50% {opacity: 1;}
   100% {opacity: 0;}
+}
+
+.viewer-controls {
+  float: right;
+  height: 500px;
+  width: 40px;
+  background: #222;
+  box-sizing: border-box;
+  box-shadow: 0 0 30px rgba(0,0,0,.3);
+}
+
+.viewer-ctrl {
+  float: top;
+  height: 40px;
+  box-sizing: border-box;
+  padding: 13px;
+  width: 40px;
+  color: rgba(255,255,255,.4);
+}
+
+.viewer-ctrl:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+
+.layout-toggle {
+  height: 35px;
+  margin-top: 10px;
+  float: left;
+  margin-left: 20px;
+  border-radius: 5px;
+  padding: 8px 20px 10px 20px;
+  box-sizing: border-box;
+  font-size: 15px;
+  color: #AAA;
+  background: rgba(255,255,255,.05);
+  font-family: Roboto-Light, sans-serif;
+  cursor: pointer;
+}
+
+.layout-toggle:hover {
+  background: rgba(255,255,255,.1);
 }
