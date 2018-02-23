@@ -76,7 +76,9 @@ class App extends Component {
 
     resetStates(){
         this.setState({
-            resetRotate: false
+            resetRotate: false,
+            zoomOut: false,
+            zoomIn: false
         })
     }
 
@@ -88,12 +90,14 @@ class App extends Component {
     }
 
     zoomInHandler() {
+        this.resetStates();
         this.setState({
-            zoomOut: false
+            zoomIn: true
         });
     }
 
     zoomOutHandler() {
+        this.resetStates();
         this.setState({
             zoomOut: true
         });
