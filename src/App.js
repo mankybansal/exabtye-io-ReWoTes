@@ -53,24 +53,21 @@ class App extends Component {
         this.toggleAxesHandler = this.toggleAxesHandler.bind(this);
     }
 
-    rotateHandler(e) {
-        e.preventDefault();
+    rotateHandler() {
         this.resetStates();
         this.setState({
             viewerRotate: !this.state.viewerRotate
         });
     }
 
-    toggleBoundHandler(e) {
-        e.preventDefault();
+    toggleBoundHandler() {
         this.resetStates();
         this.setState({
             boundingBox: !this.state.boundingBox
         });
     }
 
-    toggleAxesHandler(e) {
-        e.preventDefault();
+    toggleAxesHandler() {
         this.resetStates();
         this.setState({
             axes: !this.state.axes
@@ -79,38 +76,27 @@ class App extends Component {
 
     resetStates(){
         this.setState({
-            resetRotate: false,
-            zoomIn: false,
-            zoomOut: false,
+            resetRotate: false
         })
     }
 
-    resetRotateHandler(e) {
-        e.preventDefault();
-        this.setState(state => ({
+    resetRotateHandler() {
+        this.setState({
             resetRotate: true,
-            viewerRotate: false,
-            zoomIn: false,
-            zoomOut: false
-        }));
+            viewerRotate: false
+        });
     }
 
-    zoomInHandler(e) {
-        e.preventDefault();
-        this.setState(state => ({
-            resetRotate: false,
-            zoomIn: true,
+    zoomInHandler() {
+        this.setState({
             zoomOut: false
-        }));
+        });
     }
 
-    zoomOutHandler(e) {
-        e.preventDefault();
-        this.setState(state => ({
-            resetRotate: false,
-            zoomIn: false,
+    zoomOutHandler() {
+        this.setState({
             zoomOut: true
-        }));
+        });
     }
 
 
