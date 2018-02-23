@@ -7,7 +7,11 @@ import {
     faColumns,
     faSearchMinus,
     faExpand,
+    faExpandArrowsAlt,
     faPause,
+    faCube,
+    faAsterisk,
+    faPlay,
     faAngleDown,
     faBars,
     faStop,
@@ -23,19 +27,96 @@ import logo from './exabtye-logo.png';
 import manky from './manky.jpg';
 import './App.css';
 
-
 const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 const listItems = numbers.map((number) =>
-    <div className="App-editor-code-lines-num">{number}</div>
+    <div className="App-editor-code-lines-num" key={number}>{number}</div>
 );
 
-
 class App extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            viewerRotate: true,
+            resetRotate: false,
+            zoomIn: false,
+            zoomOut: false,
+            boundingBox: true,
+            axes: true
+        };
+
+        this.rotateHandler = this.rotateHandler.bind(this);
+        this.resetRotateHandler = this.resetRotateHandler.bind(this);
+        this.zoomInHandler = this.zoomInHandler.bind(this);
+        this.zoomOutHandler = this.zoomOutHandler.bind(this);
+        this.toggleBoundHandler = this.toggleBoundHandler.bind(this);
+        this.toggleAxesHandler = this.toggleAxesHandler.bind(this);
+    }
+
+    rotateHandler(e) {
+        e.preventDefault();
+        this.setState(state => ({
+            viewerRotate: !state.viewerRotate,
+            resetRotate: false,
+            zoomIn: false,
+            zoomOut: false
+        }));
+    }
+
+    toggleBoundHandler(e) {
+        e.preventDefault();
+        this.setState(state => ({
+            resetRotate: false,
+            zoomIn: false,
+            zoomOut: false,
+            boundingBox: !state.boundingBox
+        }));
+    }
+
+    toggleAxesHandler(e) {
+        e.preventDefault();
+        this.setState(state => ({
+            resetRotate: false,
+            zoomIn: false,
+            zoomOut: false,
+            axes: !state.axes
+        }));
+    }
+
+    resetRotateHandler(e) {
+        e.preventDefault();
+        this.setState(state => ({
+            resetRotate: true,
+            viewerRotate: false,
+            zoomIn: false,
+            zoomOut: false
+        }));
+    }
+
+    zoomInHandler(e) {
+        e.preventDefault();
+        this.setState(state => ({
+            resetRotate: false,
+            zoomIn: true,
+            zoomOut: false
+        }));
+    }
+
+    zoomOutHandler(e) {
+        e.preventDefault();
+        this.setState(state => ({
+            resetRotate: false,
+            zoomIn: false,
+            zoomOut: true
+        }));
+    }
+
+
     render() {
         return (
             <div className="App">
                 <div className="App-header">
-                    <div class="nav"><FontAwesomeIcon icon={faBars}/></div>
+                    <div className="nav"><FontAwesomeIcon icon={faBars}/></div>
                     <img src={logo} className="App-logo" alt="logo"/>
                     <div className="App-location">Material Developer</div>
 
@@ -45,7 +126,8 @@ class App extends Component {
                     </div>
 
                     <div className="App-avatar">
-                        <div className="App-avatar-text"> Mayank Bansal &nbsp; <FontAwesomeIcon icon={faAngleDown}/></div>
+                        <div className="App-avatar-text"> Mayank Bansal &nbsp; <FontAwesomeIcon icon={faAngleDown}/>
+                        </div>
 
                         <div className="App-avatar-img">
                             <img className="avatar-img" src={manky}/>
@@ -55,7 +137,7 @@ class App extends Component {
 
                 </div>
 
-                <div className="App-spacer"></div>
+                <div className="App-spacer"/>
 
                 <div className="App-menu">
                     <div className="App-menu-item">
@@ -115,7 +197,15 @@ class App extends Component {
                         <div className="container-title-2">
                             <FontAwesomeIcon icon={faEye}/>&nbsp;&nbsp;&nbsp;Visual Editor
                         </div>
-                        <Scene/>
+
+                        <ObjectViewer
+                            viewerRotate={this.state.viewerRotate}
+                            zoomIn={this.state.zoomIn}
+                            zoomOut={this.state.zoomOut}
+                            resetRotate={this.state.resetRotate}
+                            boundingBox={this.state.boundingBox}
+                            axes={this.state.axes}
+                        />
 
                         <div className="compound-details">C<sub>6</sub>H<sub>6</sub></div>
 
@@ -134,23 +224,27 @@ class App extends Component {
                         <br/>
                         <br/>
                         <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
+
+                        <div onClick={this.toggleAxesHandler} className="viewer-ctrl">
+                            <FontAwesomeIcon icon={faAsterisk}/>
+                        </div>
+                        <div onClick={this.toggleBoundHandler} className="viewer-ctrl">
+                            <FontAwesomeIcon icon={faCube}/>
+                        </div>
+                        <div onClick={this.resetRotateHandler} className="viewer-ctrl">
+                            <FontAwesomeIcon icon={faExpandArrowsAlt}/>
+                        </div>
                         <div className="viewer-ctrl">
                             <FontAwesomeIcon icon={faCamera}/>
                         </div>
-                        <div className="viewer-ctrl">
-                            <FontAwesomeIcon icon={faPause}/>
+                        <div onClick={this.rotateHandler} className="viewer-ctrl">
+                            {this.state.viewerRotate ? <FontAwesomeIcon icon={faPause}/> :
+                                <FontAwesomeIcon icon={faPlay}/>}
                         </div>
-                        <div className="viewer-ctrl">
+                        <div onClick={this.zoomInHandler} className="viewer-ctrl">
                             <FontAwesomeIcon icon={faSearchPlus}/>
                         </div>
-                        <div className="viewer-ctrl">
+                        <div onClick={this.zoomOutHandler} className="viewer-ctrl">
                             <FontAwesomeIcon icon={faSearchMinus}/>
                         </div>
                     </div>
@@ -188,16 +282,14 @@ class App extends Component {
                 </div>
 
 
-
             </div>
         );
     }
 }
 
-class Scene extends Component {
+class ObjectViewer extends Component {
     constructor(props) {
         super(props);
-
         this.start = this.start.bind(this);
         this.stop = this.stop.bind(this);
         this.animate = this.animate.bind(this);
@@ -333,10 +425,15 @@ class Scene extends Component {
         const geometry2 = new THREE.BoxBufferGeometry(5, 5, 5);
         const edges = new THREE.EdgesGeometry(geometry2);
         const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color: 0xffffff}));
+        line.name = "boundingBox";
+
+        const axesHelper = new THREE.AxesHelper(5);
+        axesHelper.position.set(0, 0, 0);
+        axesHelper.name = "axesHelper";
+
         group.add(line);
-
         scene.add(group);
-
+        scene.add(axesHelper);
 
         camera.position.z = 8;
 
@@ -352,6 +449,7 @@ class Scene extends Component {
         this.camera = camera;
         this.renderer = renderer;
         this.cube = group;
+        this.axes = axesHelper;
         this.controls = controls;
 
         this.mount.appendChild(this.renderer.domElement);
@@ -373,13 +471,50 @@ class Scene extends Component {
         cancelAnimationFrame(this.frameId)
     }
 
+    shouldComponentUpdate(nextProps) {
+        if (nextProps.resetRotate) {
+            this.cube.rotation.x = 0;
+            this.cube.rotation.y = 0;
+            this.cube.rotation.z = 0;
+            this.axes.rotation.x = 0;
+            this.axes.rotation.y = 0;
+            this.axes.rotation.z = 0;
+            this.controls.reset();
+            this.camera.zoom = 1;
+        }
+
+        if (nextProps.zoomIn) {
+            this.camera.zoom *= 1.05;
+            this.camera.updateProjectionMatrix();
+        }
+
+        if (nextProps.zoomOut) {
+            this.camera.zoom /= 1.05;
+            this.camera.updateProjectionMatrix();
+        }
+
+        return true;
+    }
+
     animate() {
-        this.cube.rotation.x += 0.01;
-        this.cube.rotation.y += 0.01;
 
         this.controls.update();
 
         this.renderScene();
+
+        if (this.props.viewerRotate) {
+            this.cube.rotation.x += 0.01;
+            this.cube.rotation.y += 0.01;
+            this.cube.rotation.y += 0.00;
+
+            this.axes.rotation.x += 0.01;
+            this.axes.rotation.y += 0.01;
+            this.axes.rotation.z += 0.00;
+        }
+
+        this.scene.getObjectByName("boundingBox").visible = this.props.boundingBox;
+        this.scene.getObjectByName("axesHelper").visible = this.props.axes;
+
         this.frameId = window.requestAnimationFrame(this.animate)
     }
 
@@ -389,11 +524,9 @@ class Scene extends Component {
 
     render() {
         return (
-            <div className="renderer"
-                 ref={(mount) => {
-                     this.mount = mount
-                 }}
-            />
+            <div className="renderer" ref={(mount) => {
+                this.mount = mount
+            }}/>
         )
     }
 }
