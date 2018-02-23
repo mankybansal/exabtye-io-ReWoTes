@@ -55,32 +55,34 @@ class App extends Component {
 
     rotateHandler(e) {
         e.preventDefault();
-        this.setState(state => ({
-            viewerRotate: !state.viewerRotate,
-            resetRotate: false,
-            zoomIn: false,
-            zoomOut: false
-        }));
+        this.resetStates();
+        this.setState({
+            viewerRotate: !this.state.viewerRotate
+        });
     }
 
     toggleBoundHandler(e) {
         e.preventDefault();
-        this.setState(state => ({
-            resetRotate: false,
-            zoomIn: false,
-            zoomOut: false,
-            boundingBox: !state.boundingBox
-        }));
+        this.resetStates();
+        this.setState({
+            boundingBox: !this.state.boundingBox
+        });
     }
 
     toggleAxesHandler(e) {
         e.preventDefault();
-        this.setState(state => ({
+        this.resetStates();
+        this.setState({
+            axes: !this.state.axes
+        });
+    }
+
+    resetStates(){
+        this.setState({
             resetRotate: false,
             zoomIn: false,
             zoomOut: false,
-            axes: !state.axes
-        }));
+        })
     }
 
     resetRotateHandler(e) {
@@ -226,19 +228,23 @@ class App extends Component {
                         <br/>
 
                         <div onClick={this.toggleAxesHandler} className="viewer-ctrl">
-                            <FontAwesomeIcon icon={faAsterisk}/>
+                            {this.state.axes ? <FontAwesomeIcon icon={faAsterisk} className="ctrlActive"/> :
+                                <FontAwesomeIcon icon={faAsterisk}/>}
                         </div>
                         <div onClick={this.toggleBoundHandler} className="viewer-ctrl">
-                            <FontAwesomeIcon icon={faCube}/>
+                            {this.state.boundingBox ? <FontAwesomeIcon icon={faCube} className="ctrlActive"/> :
+                                <FontAwesomeIcon icon={faCube}/>}
                         </div>
                         <div onClick={this.resetRotateHandler} className="viewer-ctrl">
                             <FontAwesomeIcon icon={faExpandArrowsAlt}/>
                         </div>
+
                         <div className="viewer-ctrl">
                             <FontAwesomeIcon icon={faCamera}/>
                         </div>
+
                         <div onClick={this.rotateHandler} className="viewer-ctrl">
-                            {this.state.viewerRotate ? <FontAwesomeIcon icon={faPause}/> :
+                            {this.state.viewerRotate ? <FontAwesomeIcon icon={faPause} className="ctrlActive"/> :
                                 <FontAwesomeIcon icon={faPlay}/>}
                         </div>
                         <div onClick={this.zoomInHandler} className="viewer-ctrl">
@@ -411,6 +417,7 @@ class ObjectViewer extends Component {
                     break;
 
             }
+
             geometry = new THREE.SphereBufferGeometry(defgeometry, 50, 50);
             material = new THREE.MeshBasicMaterial({color: defcolor});
             cubes[i] = new THREE.Mesh(geometry, material);
@@ -421,17 +428,15 @@ class ObjectViewer extends Component {
         //create a group and add the two cubes
         //These cubes can now be rotated / scaled etc as a group
 
-
-        const geometry2 = new THREE.BoxBufferGeometry(5, 5, 5);
-        const edges = new THREE.EdgesGeometry(geometry2);
-        const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color: 0xffffff}));
-        line.name = "boundingBox";
+        const edges = new THREE.EdgesGeometry(new THREE.BoxBufferGeometry(5, 5, 5));
+        const boundingBox = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color: 0xffffff}));
+        boundingBox.name = "boundingBox";
 
         const axesHelper = new THREE.AxesHelper(5);
         axesHelper.position.set(0, 0, 0);
         axesHelper.name = "axesHelper";
 
-        group.add(line);
+        group.add(boundingBox);
         scene.add(group);
         scene.add(axesHelper);
 
@@ -441,9 +446,7 @@ class ObjectViewer extends Component {
         renderer.setSize(width, height);
 
         const controls = new OrbitControls(camera, renderer.domElement);
-
         controls.update();
-
 
         this.scene = scene;
         this.camera = camera;
@@ -462,9 +465,8 @@ class ObjectViewer extends Component {
     }
 
     start() {
-        if (!this.frameId) {
+        if (!this.frameId)
             this.frameId = requestAnimationFrame(this.animate)
-        }
     }
 
     stop() {
@@ -496,21 +498,22 @@ class ObjectViewer extends Component {
         return true;
     }
 
+    autoRotate() {
+        this.cube.rotation.x += 0.01;
+        this.cube.rotation.y += 0.01;
+        this.cube.rotation.y += 0.00;
+
+        this.axes.rotation.x += 0.01;
+        this.axes.rotation.y += 0.01;
+        this.axes.rotation.z += 0.00;
+    }
+
     animate() {
-
         this.controls.update();
-
         this.renderScene();
 
-        if (this.props.viewerRotate) {
-            this.cube.rotation.x += 0.01;
-            this.cube.rotation.y += 0.01;
-            this.cube.rotation.y += 0.00;
-
-            this.axes.rotation.x += 0.01;
-            this.axes.rotation.y += 0.01;
-            this.axes.rotation.z += 0.00;
-        }
+        if (this.props.viewerRotate)
+            this.autoRotate();
 
         this.scene.getObjectByName("boundingBox").visible = this.props.boundingBox;
         this.scene.getObjectByName("axesHelper").visible = this.props.axes;
