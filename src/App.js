@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import * as THREE from 'three';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import CodeMirror from 'react-codemirror'
+
 import {
     faCamera,
     faSearchPlus,
@@ -26,11 +28,9 @@ import OrbitControls from 'three-orbitcontrols';
 import logo from './exabtye-logo.png';
 import manky from './manky.jpg';
 import './App.css';
-
-const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-const listItems = numbers.map((number) =>
-    <div className="App-editor-code-lines-num" key={number}>{number}</div>
-);
+import '../node_modules/codemirror/lib/codemirror.css'
+import '../node_modules/codemirror/theme/lesser-dark.css'
+import '../node_modules/codemirror/addon/selection/active-line'
 
 class App extends Component {
 
@@ -74,7 +74,7 @@ class App extends Component {
         });
     }
 
-    resetStates(){
+    resetStates() {
         this.setState({
             resetRotate: false,
             zoomOut: false,
@@ -158,32 +158,7 @@ class App extends Component {
 
                 <div className="App-editor-container">
 
-                    <div className="App-editor-code">
-                        <div className="container-title">
-                            <FontAwesomeIcon icon={faCode}/>&nbsp;&nbsp;&nbsp;Source Editor (benzene.xyz)
-                        </div>
-                        <div className="App-editor-code-lines">
-                            <div>{listItems}</div>
-                        </div>
-                        <div className="App-editor-code-text">
-                            <pre>
-                            12<br/>
-                            benzene example<br/>
-                            C        0.00000        1.40272        0.00000<br/>
-                            H        0.00000        2.49029        0.00000<br/>
-                            C       -1.21479        0.70136        0.00000<br/>
-                            H       -2.15666        1.24515        0.00000<br/>
-                            C       -1.21479       -0.70136        0.00000<br/>
-                            H       -2.15666       -1.24515        0.00000<br/>
-                            C        0.00000       -1.40272        0.00000<br/>
-                            H        0.00000       -2.49029        0.00000<br/>
-                            C        1.21479       -0.70136        0.00000<br/>
-                            H        2.15666       -1.24515        0.00000<br/>
-                            C        1.21479        0.70136        0.00000<br/>
-                            H        2.15666        1.24515        0.00000<br/>
-                            </pre>
-                        </div>
-                    </div>
+                    <CodeEditor/>
                     <div className="App-editor-view">
 
                         <div className="container-title-2">
@@ -280,6 +255,49 @@ class App extends Component {
 
             </div>
         );
+    }
+}
+
+
+class CodeEditor extends Component {
+    constructor(props) {
+        super(props);
+
+
+        this.state = {
+            code: ""
+        };
+
+        this.updateCode = this.updateCode.bind(this);
+
+    }
+
+    updateCode(newCode) {
+        this.setState({
+            code: newCode
+        });
+    }
+
+
+    render() {
+
+        let options = {
+            lineNumbers: true,
+            theme: "lesser-dark",
+            styleSelectedText: true
+        };
+
+        return (
+            <div className="App-editor-code">
+
+                <div className="container-title">
+                    <FontAwesomeIcon icon={faCode}/>&nbsp;&nbsp;&nbsp;Source Editor (benzene.xyz)
+                </div>
+
+
+               <CodeMirror value={this.state.code} onChange={this.updateCode} options={options}/>
+            </div>
+        )
     }
 }
 
