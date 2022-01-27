@@ -13,7 +13,7 @@
     "react-scripts": "^4.0.3",
     "react-three": "^0.9.7",
     "roboto-fontface": "^0.9.0",
-    "three": "^0.127.0",
+    "three": "^0.137.0",
     "three-orbitcontrols": "^2.0.0"
   },
   "scripts": {
