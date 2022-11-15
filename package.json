@@ -10,7 +10,7 @@
     "react": "^16.2.0",
     "react-codemirror": "^1.0.0",
     "react-dom": "^16.2.0",
-    "react-scripts": "^4.0.3",
+    "react-scripts": "^5.0.1",
     "react-three": "^0.9.7",
     "roboto-fontface": "^0.9.0",
     "three": "^0.127.0",
